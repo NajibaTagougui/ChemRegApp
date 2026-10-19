@@ -1,8 +1,8 @@
-name: Deploy to GitHub Pages
+name: Deploy React Vite App with Bun
 
 on:
   push:
-    branches: ['main']
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
@@ -10,28 +10,39 @@ permissions:
   pages: write
   id-token: write
 
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
   build-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      
-      # 1. Setup Bun instead of Node
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
       - name: Setup Bun
-        uses: oven-sh/setup-bun@v1
+        uses: oven-sh/setup-bun@v2 # Upgraded to v2 to address the deprecation warning
         with:
           bun-version: latest
-          
-      # 2. Install dependencies using Bun
-      - name: Install dependencies
-        run: bun install
-        
-      # 3. Build using Bun
-      - name: Build
+
+      - name: Install Dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build Application
         run: bun run build
-        
-      # 4. Deploy (same as before)
-      - uses: actions/upload-pages-artifact@v3
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Production Artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: './dist'
-      - uses: actions/deploy-pages@v4
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
