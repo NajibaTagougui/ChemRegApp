@@ -12,6 +12,12 @@ export default defineConfig(() => {
         '@': path.resolve(__dirname, '.'),
       },
     },
+      build: {
+        rollupOptions: {
+        // This tells Vite to ignore the backend server file during the build
+        external: ['express', 'dotenv'], 
+      }
+    },
     server: {
       // HMR is disabled in AI Studio via DISABLE_HMR env var.
       // Do not modify—file watching is disabled to prevent flickering during agent edits.
