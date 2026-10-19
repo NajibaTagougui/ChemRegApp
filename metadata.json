@@ -1,0 +1,6 @@
+{
+  "name": "ChemReg Global Chemical Compliance & Molecular Analysis Platform",
+  "description": "Comprehensive regulatory database for global chemical compliance monitoring (REACH, TSCA, GHS, RoHS, Prop 65), interactive 3D molecular structure visualization, dynamic SMILES extraction, and ChemRegNet dual-channel explainability with SDS generation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

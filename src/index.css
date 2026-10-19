@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: #020617;
+    color: #f8fafc;
+    overflow-x: hidden;
+  }
+}
+
+/* Print Styles for Official 16-Section Safety Data Sheets */
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  header, footer, nav, button, .no-print {
+    display: none !important;
+  }
+
+  .bg-slate-900, .bg-slate-950 {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border-color: #cccccc !important;
+    box-shadow: none !important;
+  }
+
+  .text-white, .text-slate-100, .text-slate-200, .text-slate-300 {
+    color: #000000 !important;
+  }
+
+  .text-slate-400, .text-slate-500 {
+    color: #444444 !important;
+  }
+}
