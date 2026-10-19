@@ -1,26 +1,53 @@
-  runs-on: ubuntu-latest
+name: Build and Deploy React App
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-24.04
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-      
-      # 1. Setup Bun instead of Node
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v1
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
         with:
-          node-version: '20'
+          node-version: 22
           cache: 'npm'
-      - run: npm ci
-      - run: npm run build
-          bun-version: latest
-          
-      # 2. Install dependencies using Bun
+          # If your package-lock.json lives in a subfolder, uncomment and adjust:
+          # cache-dependency-path: './package-lock.json'
+
       - name: Install dependencies
-        run: bun install
-        
-      # 3. Build using Bun
+        run: npm ci
+
       - name: Build
-        run: bun run build
-        
-      # 4. Deploy (same as before)
-      - uses: actions/upload-pages-artifact@v3
+        run: npm run build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
+          path: ./build   # change to ./dist if you use Vite
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
